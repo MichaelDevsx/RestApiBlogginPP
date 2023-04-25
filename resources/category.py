@@ -15,11 +15,11 @@ blp = Blueprint("Categories", "categories", description="Operation on categories
 class Category(MethodView):
     @blp.response(200, PlainCategorySchema)
     def get(self, category_id):
-        category = CategoryModel.query.get(category_id)
+        category = CategoryModel.query.get_or_404(category_id)
         return category
     
     def delete(self, category_id):
-        category = CategoryModel.query.get(category_id)
+        category = CategoryModel.query.get_or_404(category_id)
 
         db.session.delete(category)
         db.session.commit()
@@ -31,7 +31,11 @@ class Category(MethodView):
 class CategoriesList(MethodView):
     @blp.response(200, PlainCategorySchema(many=True))
     def get(self):
-        return CategoryModel.query.all()
+        category = CategoryModel.query.all()
+        if len(category) == 0:
+            abort(404, message="There are not categories yet available")
+        else:
+            return category
 
     @blp.arguments(PlainCategorySchema)
     @blp.response(201, PlainCategorySchema)

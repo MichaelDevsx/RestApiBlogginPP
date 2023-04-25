@@ -3,7 +3,7 @@ from marshmallow import Schema, fields
 class PlainUserSchema(Schema):
     id = fields.Int(dump_only=True)
     name = fields.Str()
-    email = fields.Str(required=True)
+    email = fields.Email(required=True)
     password = fields.Str(required=True, load_only=True)
     date_reg = fields.Date()
     
@@ -16,7 +16,7 @@ class PlainPostSchema(Schema):
 class PlainCommentSchema(Schema):
     id = fields.Int(dump_only=True)
     name = fields.Str()
-    email = fields.Str(required=True)
+    email = fields.Email(required=True)
     comment = fields.Str()
 
 class PlainCategorySchema(Schema):
@@ -39,3 +39,9 @@ class UserPostSchema(Schema):
     message = fields.Str()
     user = fields.Nested(UserSchema)
     tag = fields.Nested(PostSchema)
+
+class UserAndPostSchema(Schema):
+    message = fields.Str()
+    user = fields.Nested(UserSchema)
+    post = fields.Nested(PostSchema)
+    
